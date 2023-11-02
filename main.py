@@ -78,7 +78,7 @@ if __name__ == "__main__":
     cuda_name = "cuda:0"
     print('cuda_name:', cuda_name)
 
-    NUM_EPOCHS = 250
+    NUM_EPOCHS = 300
     LR = 0.0005
 
     print('Learning rate: ', LR)
