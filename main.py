@@ -8,27 +8,7 @@ from model import set_seed
 from sklearn.model_selection import KFold, GridSearchCV
 
 
-def ViewContrastiveLoss(view_i, view_j, batch, temperature):
-    z_i = F.normalize(view_i, dim=1)
-    z_j = F.normalize(view_j, dim=1)
 
-    representations = torch.cat([z_i, z_j], dim=0)
-    similarity_matrix = F.cosine_similarity(representations.unsqueeze(1), representations.unsqueeze(0),
-                                            dim=2)
-    similarity_matrix = similarity_matrix.to(device)
-    sim_ij = torch.diag(similarity_matrix, batch)
-    sim_ji = torch.diag(similarity_matrix, -batch)
-    positives = torch.cat([sim_ij, sim_ji], dim=0)
-
-    nominator = torch.exp(positives / temperature)
-    negatives_mask = torch.ones(2 * batch, 2 * batch) - torch.eye(2 * batch, 2 * batch)
-    negatives_mask = negatives_mask.to(device)
-    denominator = negatives_mask * torch.exp(similarity_matrix / temperature)
-
-    loss_partial = -torch.log(nominator / torch.sum(denominator, dim=1))
-    loss = torch.sum(loss_partial) / (2 * batch)
-
-    return loss
 
 
 # training function at each epoch
@@ -68,7 +48,7 @@ def predicting(model, device, loader):
             edge = data.edge_index1.detach()
             xd = data.x1.detach()
             output, x_g, x_g1, output1 = model(data, data.x, data.edge_index, data.batch, xd, edge, batch1)
-            total_preds = torch.cat((total_preds, output1.cpu()), 0)
+            total_preds = torch.cat((total_preds, output.cpu()), 0)
             total_labels = torch.cat((total_labels, data.y.cpu()), 0)
     return total_labels, total_preds
 
