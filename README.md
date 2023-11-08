@@ -8,7 +8,7 @@
 - torch==1.13.1
 - torch-geometric == 2.0.4
   
-- ## Preprocessing
+ ## Preprocessing
 
 `python create_data.py`
 
