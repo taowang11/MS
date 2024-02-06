@@ -69,7 +69,7 @@ if __name__ == "__main__":
     data_listtrain = torch.load(processed_train)
     data_listtest = torch.load(processed_test)
 
-    kf = KFold(n_splits=10, shuffle=False)
+    
 
 
     def custom_batching(data_list, batch_size):
