@@ -23,6 +23,7 @@ def set_seed(seed_value=42):
 class MS_BACL(nn.Module):
     def __init__(self, num_features_xd=93,dropout=0.5,aug_ratio=0.4):
         super(MS_BACL, self).__init__()
+        self.alpha_param = nn.Parameter(torch.log(torch.tensor(0.1)))
 
         self.W_rnn = nn.GRU(bidirectional=True, num_layers=1, input_size=100, hidden_size=100)
 
