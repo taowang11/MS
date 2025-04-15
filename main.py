@@ -99,6 +99,7 @@ if __name__ == "__main__":
     device = torch.device(cuda_name if torch.cuda.is_available() else "cpu")
     model = MS_BACL().cuda()
     criterion = nn.BCEWithLogitsLoss()
+     optimizer_alpha = torch.optim.SGD([model.alpha_param], lr=0.1)
     optimizer = torch.optim.Adam(model.parameters(), lr=LR)
     max_auc = 0
 
