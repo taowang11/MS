@@ -26,9 +26,10 @@ def train(model, device, train_loader, optimizer, epoch):
         loss_1 = criterion(output, data.y.view(-1, 1).float())
         criterion1 = NT_Xent(output.shape[0], 0.1, 1)
         loss_2 = criterion(output1, data.y.view(-1, 1).float())
+        alpha = torch.sigmoid(model.alpha_param)
 
         cl_loss = criterion1(x_g, x_g1)
-        loss = loss_1 + 0.3 * cl_loss + loss_2
+        loss = loss_1 + alpha * cl_loss + loss_2
         # loss = loss_1
         loss.backward()
         optimizer.step()
