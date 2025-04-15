@@ -12,7 +12,7 @@ from sklearn.model_selection import KFold, GridSearchCV
 
 
 # training function at each epoch
-def train(model, device, train_loader, optimizer, epoch):
+def train(model, device, train_loader, optimizer,optimizer_alpha, epoch):
     lossz = 0
     model.train()
     for batch_idx, data in enumerate(train_loader):
@@ -22,6 +22,7 @@ def train(model, device, train_loader, optimizer, epoch):
         xd = data.x1.detach()
         n = data.y.shape[0]  # batch
         optimizer.zero_grad()
+        optimizer_alpha.zero_grad()
         output, x_g, x_g1, output1 = model(data, data.x, data.edge_index, data.batch, xd, edge, batch1)
         loss_1 = criterion(output, data.y.view(-1, 1).float())
         criterion1 = NT_Xent(output.shape[0], 0.1, 1)
@@ -32,6 +33,7 @@ def train(model, device, train_loader, optimizer, epoch):
         loss = loss_1 + alpha * cl_loss + loss_2
         # loss = loss_1
         loss.backward()
+        optimizer_alpha.step()
         optimizer.step()
         lossz = loss + lossz
 
